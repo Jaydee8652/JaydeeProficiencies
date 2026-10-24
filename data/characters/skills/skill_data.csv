@@ -1,0 +1,10 @@
+id,name,order,tier,reqPoints,reqPointsPerExtraSkill,description,author,combat officer,admiral,admin,tags,icon
+jdp_mentorship,Mentorship,1,0,,,"Those who can, do. Those who care, teach. The path out of darkness will not be walked by us, but by you. For the sector to survive, we must pass on all we can.","Provost Hemshall Brisdon, Commencement Address, c32",TRUE,FALSE,TRUE,"codex_unlockable, jdp_marker_skill, npc_only, ai_core_only",graphics/icons/skills/jdp_mentorship.png
+jdp_unapplied_marker,Inactive Skills,1,1,,,"""It is a uniquely horrible feeling, to realise that something which once came naturally now does not come at all.""",Luddic Proverb,TRUE,FALSE,TRUE,"jdp_marker_skill, ai_core_only, npc_only",graphics/icons/skills/jdp_unapplied_marker.png
+jdp_refit_applicator,Refit Applicator,100000,1,0,,"YOU SHOULDN'T SEE ME, I EXIST FOR BEHIND THE CURTAIN WEIRDNESS
+
+Please contact Jaydee8652 with details.",,,,,"npc_only, dummy",graphics/icons/skills/jdp_unapplied_marker.png
+,,,,,,,,,,,,
+#Aptitudes,,,,,,,,,,,,
+jdp_aptitude_unique,,1,,,,,,,,,npc_only,
+jdp_aptitude_espionage,,1,,,,,,,,,npc_only,

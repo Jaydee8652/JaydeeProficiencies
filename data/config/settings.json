@@ -1,0 +1,33 @@
+{
+	"ruleCommandPackages":[
+        "Jaydee8652.JaydeeProficiencies.utils.rulecmd"
+    ],
+	"graphics":{
+		"ui":{
+			"jdp_tripad_bot_left_decor_extended":"graphics/icons/skills/jdp_tripad_bot_left_decor_extended.png",
+			"jdp_tripad_bot_left_decor_extended_ash":"graphics/icons/skills/jdp_tripad_bot_left_decor_extended_ash.png",
+			"jdp_skillinactive":"graphics/icons/skills/jdp_skillinactive.png",
+			"jdp_save":"graphics/icons/skills/jdp_save.png",
+			"jdp_skillactive":"graphics/icons/skills/jdp_skillactive.png",
+			"jdp_skillarrow":"graphics/icons/skills/jdp_skillarrow.png",
+			"jdp_skillarrow_full":"graphics/icons/skills/jdp_skillarrow_full.png",
+			"jdp_iconadmin":"graphics/icons/skills/jdp_iconadmin.png",
+			"jdp_iconofficer":"graphics/icons/skills/jdp_iconofficer.png",
+			"jdp_iconplayer":"graphics/icons/skills/jdp_iconplayer.png",
+			"jdp_iconnotification":"graphics/icons/skills/jdp_iconnotification.png",
+			"jdp_xp":"graphics/icons/skills/jdp_xp.png",
+			"jdp_xp_fill":"graphics/icons/skills/jdp_xp_fill.png",
+			"jdp_xp_dark":"graphics/icons/skills/jdp_xp_dark.png",
+			"jdp_scanlines":"graphics/icons/skills/jdp_scanlines.png",
+		}
+	},
+	"plugins":{
+		"jdp_CombatHandler":"Jaydee8652.JaydeeProficiencies.utils.combat.jdp_CombatHandler",
+	},
+}
+
+
+
+
+
+

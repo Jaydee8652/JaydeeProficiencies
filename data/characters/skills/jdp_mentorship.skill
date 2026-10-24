@@ -1,0 +1,23 @@
+{
+	"id":"jdp_mentorship",
+	"governingAptitude":"leadership", # why not
+	"compressHullmods":false,
+	"scope":"CUSTOM",
+	"scopeStr":"specialist",
+	"effectGroups":[
+		{
+			"requiredSkillLevel":1,
+			"effectBasedOnLevel":false,
+			"effects":[
+				{"type":"GOVERNED_OUTPOST", "script":"Jaydee8652.JaydeeProficiencies.skills.jdp_mentorship$Level0"},
+			]
+		},
+		{
+			"requiredSkillLevel":1,
+			"effectBasedOnLevel":false,
+			"effects":[
+				{"type":"CHARACTER_STATS", "script":"Jaydee8652.JaydeeProficiencies.skills.jdp_mentorship$Level1"},
+			]
+		},
+	],
+}

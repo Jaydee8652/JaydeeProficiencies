@@ -1,0 +1,14 @@
+id,name,color,tags,type,maxLevel,mentor,apprenticeMaxLevel,order,plugin
+#,,"#(Color of the UI)
+
+#Does not determine the color of skills",#(See jdp_SpecialistTags for base tags),"#(What types of personelle is this proficiency. Will be added to the fleet list once hired)
+
+#officer, admin",#(Max level for Specialists with this Proficiency),"#What types of personelle can be mentored.
+
+#officer, admin, player
+
+#Must have the Mentorship skill in mentor sections
+","#(Max level for the Apprentice of a Specialist with this Proficiency)
+#Should be 1 if Proficiency cannot have an Apprentice","#(In theory used for sorting)
+#Unused",
+jdp_dummy,Dummy Proficiency,"0,0,0,255",base,,1,,1,9999,Jaydee8652.JaydeeProficiencies.specialists.jdp_ProficiencyDummy

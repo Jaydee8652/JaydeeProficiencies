@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="PatchLibAPI">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../PatchLib/jars/PatchLibAPI.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

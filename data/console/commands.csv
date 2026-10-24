@@ -1,0 +1,8 @@
+command,class,tags,syntax,help
+AddAdmin,Jaydee8652.JaydeeProficiencies.console.AddAdmin,"cheat,campaign",AddAdmin [optionalSkillId] [optionalLevel],Adds a random administrator to your fleet. You can optionally specify a starting skill
+LevelSpecialist,Jaydee8652.JaydeeProficiencies.console.LevelSpecialist,"cheat,campaign",LevelSpecialist [specialistId] [experience],Adds XP to a given specialist
+ListSpecialists,Jaydee8652.JaydeeProficiencies.console.ListSpecialists,campaign,ListSpecialists,Lists the IDs of all active specialists
+AddFleet,Jaydee8652.JaydeeProficiencies.console.AddFleet,"cheat,campaign",AddFleet [faction] [combatFP],"Generates the ships, officers and crew of a faction fleet and adds them to the player fleet. Increases officer cap to accommodate added officers, leave all args empty to unapply this modifier."
+GenerateEncounter,Jaydee8652.JaydeeProficiencies.console.GenerateEncounter,"cheat,campaign",GenerateEncounter [encounterId],Generates the specified encounter within sensor range. 
+OpenTestingPanel,Jaydee8652.JaydeeProficiencies.console.OpenTestingPanel,"dev,campaign",OpenTestingPanel,Opens the JaydeeProficiencies testing panel. Dev utility for testing UI elements.
+ShowArmor,Jaydee8652.JaydeeProficiencies.console.ShowArmor,"core,combat",ShowArmor,Toggles showing armor values of all ships in combat

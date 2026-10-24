@@ -1,0 +1,12 @@
+JaydeeProficiencies hereby humbly wishes to thank the following people for their contributions, without which this mod would not exist.
+
+*Currently unused
+
+==Code==
+Lukas04 - Second In Command is such an obvious inspiration it needs no mention
+PurpleNebula - General development discussion.
+Kaysaar - Horizontal scrollbars. General development discussion
+Rolfos - Reflection Knowledge
+Wisp - System generation code
+
+This file also provides the version number at a glance! Neat Huh!

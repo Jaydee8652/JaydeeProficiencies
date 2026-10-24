@@ -1,0 +1,7 @@
+{
+	"logo":"graphics/factions/jdp_omega_flag.png",
+	"crest":"graphics/factions/jdp_omega_crest.png",
+	
+	"color":[235,235,235,255],
+	"baseUIColor":[235,235,235,255],
+},

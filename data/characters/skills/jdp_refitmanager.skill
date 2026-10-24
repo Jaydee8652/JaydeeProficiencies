@@ -1,0 +1,17 @@
+{
+	"id":"jdp_refit_applicator",
+	"governingAptitude":"jdp_unique",
+	"compressHullmods":false,
+	"scopeStr":"all ships",
+	"scope":"CUSTOM",
+	"effectGroups":[
+		{
+			"requiredSkillLevel":0,
+			"effectBasedOnLevel":false,
+			"effects":[
+				{"type":"ALL_SHIPS_IN_FLEET", "script":"Jaydee8652.JaydeeProficiencies.skills.jdp_refit_applicator$Level1"},
+			]
+		},
+
+	],
+}

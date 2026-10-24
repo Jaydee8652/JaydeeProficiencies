@@ -1,0 +1,12 @@
+{
+	"id":"jdp_aptitude_unique",
+	"governingAptitude":"jdp_unique",
+	"effectGroups":[
+		{
+			"requiredSkillLevel":0,
+			"effects":[
+				{"type":"DESCRIPTION", "script":"com.fs.starfarer.api.impl.campaign.skills.AptitudeDesc$Level0"},
+			]
+		},
+	],
+}
