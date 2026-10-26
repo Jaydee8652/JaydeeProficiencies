@@ -10,6 +10,7 @@ import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.ButtonAPI;
 import com.fs.starfarer.api.ui.CutStyle;
+import com.fs.starfarer.api.ui.UIPanelAPI;
 import com.fs.starfarer.api.util.Misc;
 import org.lwjgl.input.Keyboard;
 import patchlib.api.context.AfterContext;
@@ -20,10 +21,15 @@ import patchlib.api.patch.After;
 import patchlib.api.patch.Patch;
 import patchlib.api.patch.RedirectMethodCall;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Patch(target = @ClassMatch(packageName = "com.fs.starfarer.campaign.ui.marketinfo", methodMatches = { @MethodMatch(methodName = "charTypeFailed") }))
 public class FactionPanelPatch {
+    public interface FactionPanelOpenedListener {
+        void reportFactionPanelOpened(Object dialog, UIPanelAPI panel, ButtonAPI flag, ButtonAPI confirm, ButtonAPI color);
+    }
+
     @RedirectMethodCall(
             target = @MethodMatch(methodName = "advanceImpl", parameterCount = 1),
             call = @MethodMatch(methodName = "show", parameterCount = 2)
@@ -44,7 +50,7 @@ public class FactionPanelPatch {
         if (self.getClass().equals(ClassRefs.FactionDialogClass)) {
             ButtonAPI flagButton = null;
             ButtonAPI confirmButton = null;
-            ButtonAPI colorButton = null;
+            ButtonAPI existingColorButton = null;
 
             var panel = ReflectionUtilis.invokeMethodDirectly(ClassRefs.FactionDialogGetInnerPanelMethod, self);
             var children = (List<Object>) ReflectionUtilis.invokeMethodDirectly(ClassRefs.uiPanelgetChildrenNonCopyMethod, panel);
@@ -54,12 +60,12 @@ public class FactionPanelPatch {
                     if (button.getPosition().getHeight() > 100f) flagButton = button;
                     if (button.getText() != null && button.getText().contains("Confirm")) confirmButton = button;
                     if (button.getText() != null && button.getText().contains("Faction Color")) {
-                        colorButton = button;
+                        existingColorButton = button;
                         break;
                     }
                 }
             }
-            if (confirmButton == null || flagButton == null || colorButton != null) return;
+            if (confirmButton == null || flagButton == null || existingColorButton != null) return;
 
             var trigger = new jdp_FactionDialogInjector.jdp_FactionColorTabTrigger();
             trigger.initialise(self);
@@ -77,35 +83,9 @@ public class FactionPanelPatch {
             );
             new UIPanel(panel).add(button).getInstance().belowLeft(flagButton, confirmButton.getPosition().getHeight());
 
-            //Potential compat with Zoey?
-            /*
-            var buttonB = UIReflectionUtils.makeButton(
-                    "Fleet Names",
-                    trigger,
-                    Misc.getBasePlayerColor(),
-                    Misc.getDarkPlayerColor(),
-                    Alignment.MID,
-                    CutStyle.TL_BR,
-                    flagButton.getPosition().getWidth(),
-                    confirmButton.getPosition().getHeight(),
-                    Keyboard.KEY_F,
-                    true
-            );
-            new UIPanel(panel).add(buttonB).getInstance().belowLeft(button.getInstance(), 5f);
-
-            var buttonC = UIReflectionUtils.makeButton(
-                    "Ranks & Posts",
-                    trigger,
-                    Misc.getBasePlayerColor(),
-                    Misc.getDarkPlayerColor(),
-                    Alignment.MID,
-                    CutStyle.TL_BR,
-                    flagButton.getPosition().getWidth(),
-                    confirmButton.getPosition().getHeight(),
-                    Keyboard.KEY_R,
-                    true
-            );
-            UIPanel(panel).add(buttonC).getInstance().belowLeft(buttonB.getInstance(), 5f);*/
+            for (FactionPanelOpenedListener listener : new ArrayList<FactionPanelOpenedListener>(Global.getSector().getListenerManager().getListeners(FactionPanelOpenedListener.class))) {
+                listener.reportFactionPanelOpened(self, (UIPanelAPI) panel, flagButton, confirmButton, button.getInstance());
+            }
         }
     }
 }
