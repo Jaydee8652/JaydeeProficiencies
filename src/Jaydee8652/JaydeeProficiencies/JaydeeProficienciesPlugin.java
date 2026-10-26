@@ -1,7 +1,6 @@
 package Jaydee8652.JaydeeProficiencies;
 
 import Jaydee8652.JaydeeProficiencies.specialists.jdp_SpecialistExperienceManager;
-import Jaydee8652.JaydeeProficiencies.ui.jdp_FactionDialogInjector;
 import Jaydee8652.JaydeeProficiencies.ui.jdp_SpecialistTabInjector;
 import Jaydee8652.JaydeeProficiencies.utils.campaign.jdp_FactionUtils;
 import Jaydee8652.JaydeeProficiencies.utils.campaign.jdp_PlayerFactionIntel;
@@ -33,7 +32,6 @@ public class JaydeeProficienciesPlugin extends BaseModPlugin {
         jdp_FactionUtils.updatePlayerFaction();
         Global.getSector().getPlayerPerson().getStats().setSkillLevel("jdp_refit_applicator", 1);
         Global.getSector().addTransientScript(new jdp_SpecialistTabInjector());
-        Global.getSector().addTransientScript(new jdp_FactionDialogInjector());
         new jdp_SpecialistExperienceManager().init();
 
         orbitValidator();

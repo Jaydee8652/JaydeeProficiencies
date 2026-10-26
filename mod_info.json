@@ -13,6 +13,10 @@
         "name": "MagicLib",
     },
     {
+        "id": "lunalib",
+        "name": "LunaLib",
+    },
+    {
         "id": "patchlib",
         "name": "! PatchLib !",
     }

@@ -5,40 +5,35 @@ import Jaydee8652.JaydeeProficiencies.specialists.elements.jdp_PresetFactionElem
 import Jaydee8652.JaydeeProficiencies.specialists.plugins.jdp_ColorWheelPlugin;
 import Jaydee8652.JaydeeProficiencies.utils.campaign.jdp_FactionUtils;
 import Jaydee8652.JaydeeProficiencies.utils.refl.ReflectionUtilis;
-import Jaydee8652.JaydeeProficiencies.utils.refl.ReflectionUtils;
-import Jaydee8652.JaydeeProficiencies.utils.refl.ui.*;
-import com.fs.starfarer.api.EveryFrameScript;
+import Jaydee8652.JaydeeProficiencies.utils.refl.ui.ClassRefs;
+import Jaydee8652.JaydeeProficiencies.utils.refl.ui.ListenerFactory;
+import Jaydee8652.JaydeeProficiencies.utils.refl.ui.UIPanel;
+import Jaydee8652.JaydeeProficiencies.utils.refl.ui.UIReflectionUtils;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.FactionAPI;
 import com.fs.starfarer.api.impl.SimulatorPluginImpl;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
-import com.fs.starfarer.campaign.Faction;
 import com.fs.starfarer.ui.impl.StandardTooltipV2Expandable;
 import com.fs.starfarer.ui.interfacenew;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.lazywizard.console.BaseCommand;
 import org.lwjgl.input.Keyboard;
-import sound.O;
 
 import java.awt.*;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.sql.Ref;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 
 import static Jaydee8652.JaydeeProficiencies.specialists.jdp_SpecialistUtils.clearChildren;
 import static Jaydee8652.JaydeeProficiencies.utils.JaydeeCommons.getColor;
 import static Jaydee8652.JaydeeProficiencies.utils.campaign.jdp_FactionUtils.*;
-import static Jaydee8652.JaydeeProficiencies.utils.campaign.jdp_FactionUtils.brightUIColorKey;
-import static Jaydee8652.JaydeeProficiencies.utils.campaign.jdp_IndustryUtils.capitaliseFirst;
 import static Jaydee8652.JaydeeProficiencies.utils.refl.ui.UIReflectionUtils.*;
-import static Jaydee8652.JaydeeProficiencies.utils.refl.ui.UIReflectionUtils.getCoreUI;
 import static com.fs.starfarer.api.impl.SimulatorPluginImpl.UNLOCKS_DATA_FILE;
 
-public class jdp_FactionDialogInjector implements EveryFrameScript {
+public class jdp_FactionDialogInjector {
     public static class jdp_FactionColorTabTrigger extends ListenerFactory.ActionListener {
         private static Object dialog;
 
@@ -53,7 +48,6 @@ public class jdp_FactionDialogInjector implements EveryFrameScript {
     }
 
     public static List<String> JDP_FACTION_COLOR_BLACKLIST = new ArrayList<>();
-
     static {
         JDP_FACTION_COLOR_BLACKLIST.add("mercenary");
         JDP_FACTION_COLOR_BLACKLIST.add("lions_guard");
@@ -63,85 +57,10 @@ public class jdp_FactionDialogInjector implements EveryFrameScript {
         JDP_FACTION_COLOR_BLACKLIST.add("sleeper");
         JDP_FACTION_COLOR_BLACKLIST.add("knights_of_ludd");
         JDP_FACTION_COLOR_BLACKLIST.add("player");
-        JDP_FACTION_COLOR_BLACKLIST.add("player");
         JDP_FACTION_COLOR_BLACKLIST.add("nex_temp");
         JDP_FACTION_COLOR_BLACKLIST.add("nex_derelict");
         JDP_FACTION_COLOR_BLACKLIST.add("ML_bounty");
         JDP_FACTION_COLOR_BLACKLIST.add("jdp_deadcomm");
-    }
-
-    @Override
-    public boolean isDone() {
-        return false;
-    }
-
-    @Override
-    public boolean runWhilePaused() {
-        return true;
-    }
-
-    @Override
-    public void advance(float amount) {
-        injectFactionColorButton();
-    }
-
-    public static void injectFactionColorButton() {
-        var FactionDialog = findFactionDialog();
-        if (FactionDialog == null) return;
-
-        ButtonAPI flagButton = null;
-        ButtonAPI confirmButton = null;
-        ButtonAPI colorButton = null;
-
-        var panel = ReflectionUtilis.invokeMethodDirectly(ClassRefs.FactionDialogGetInnerPanelMethod, FactionDialog);
-        var children = (List<Object>) ReflectionUtilis.invokeMethodDirectly(ClassRefs.uiPanelgetChildrenNonCopyMethod, panel);
-
-        for (Object child : children) {
-            if (child instanceof ButtonAPI button) {
-                if (button.getPosition().getHeight() > 100f) flagButton = button;
-                if (button.getText() != null && button.getText().contains("Confirm")) confirmButton = button;
-                if (button.getText() != null && button.getText().contains("Faction Color")) {
-                    colorButton = button;
-                    break;
-                }
-            }
-        }
-        if (confirmButton == null || flagButton == null || colorButton != null) return;
-
-        var trigger = new jdp_FactionColorTabTrigger();
-        trigger.initialise(FactionDialog);
-        var button = UIReflectionUtils.makeButton(
-                "Faction Color",
-                trigger,
-                Misc.getBasePlayerColor(),
-                Misc.getDarkPlayerColor(),
-                Alignment.MID,
-                CutStyle.TL_BR,
-                flagButton.getPosition().getWidth(),
-                confirmButton.getPosition().getHeight(),
-                Keyboard.KEY_C,
-                true
-        );
-        var pos = new UIPanel(panel).add(button);
-        pos.getInstance().belowLeft(flagButton, confirmButton.getPosition().getHeight());
-    }
-
-    public static Object findFactionDialog() {
-        UIPanelAPI core = UIReflectionUtils.getCoreUI();
-        if (core == null) return null;
-
-        var CampaignState = ReflectionUtilis.invokeMethodDirectly(ClassRefs.coreUIgetPluginMethod, core);
-        var main = ReflectionUtilis.invokeMethodDirectly(ClassRefs.campaignStateGetScreenPanelMethod, CampaignState);
-
-        List<Object> children = new ArrayList<>();
-        for (Object child : (List<Object>) ReflectionUtilis.invokeMethodDirectly(ClassRefs.uiPanelgetChildrenNonCopyMethod, main))
-            if (child.getClass().equals(ClassRefs.FactionDialogClass)) children.add(child);
-        for (Object child : (List<Object>) ReflectionUtilis.invokeMethodDirectly(ClassRefs.uiPanelgetChildrenNonCopyMethod, core))
-            if (child.getClass().equals(ClassRefs.FactionDialogClass)) children.add(child);
-
-        //Get the last one, that's the most recent one and won't just be removed in a few frames
-        if (!children.isEmpty()) return children.get(children.size() - 1);
-        return null;
     }
 
     public static final String AUTOGENERATE_CHECKED = "jdp_autogenerateFactionColorChecked";
