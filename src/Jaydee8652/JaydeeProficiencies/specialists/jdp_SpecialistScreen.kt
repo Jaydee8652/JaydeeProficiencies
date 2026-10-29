@@ -201,29 +201,15 @@ object jdp_SpecialistScreen {
         if (core == null) return null
 
         var corePanels = core.getChildrenCopy().filter { it is UIPanelAPI } as List<UIPanelAPI>
-        var innerPanels = corePanels.map {
-            it.getChildrenCopy().find { children -> ReflectionUtils.hasMethodOfName("canReassign", children) }
-        }
-
-        for (panel in corePanels) {
-            for (child in panel.getChildrenCopy()) {
-                if (panel.getChildrenCopy().size == 1) {
-                    //panel.removeComponent(panel.getChildrenCopy().get(0))
-
-                    var meth = ReflectionUtilis.getMethods(child)
-                    var clazz = child.javaClass
-                }
-            }
-        }
+        var innerPanels = corePanels.map { it.getChildrenCopy().find { children -> ReflectionUtils.hasMethodOfName("canReassign", children) } }
 
         if (Global.getSettings().getModManager().isModEnabled("second_in_command")) {
             corePanels = corePanels.stream().filter { p -> p.getChildrenCopy().size == 1 }.toList()
-            innerPanels = corePanels.map {
-                it.getChildrenCopy().find { children -> ReflectionUtilis.getMethods(children).size == 15 }
-            }
+            innerPanels = corePanels.map { it.getChildrenCopy().find { children -> ReflectionUtilis.getMethods(children).size == 15 } } as List<UIPanelAPI>
+            innerPanels = innerPanels.filterNotNull().filter{ p -> p.getChildrenCopy().size == 1 }
         }
 
-        return innerPanels.filterNotNull().firstOrNull() as UIPanelAPI? ?: return null
+        return innerPanels.filterNotNull().lastOrNull() as UIPanelAPI?
     }
 
     @JvmStatic

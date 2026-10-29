@@ -5,10 +5,10 @@ import Jaydee8652.JaydeeProficiencies.specialists.data.jdp_Specialist;
 import Jaydee8652.JaydeeProficiencies.specialists.data.jdp_SpecialistData;
 import Jaydee8652.JaydeeProficiencies.specialists.data.jdp_SpecialistExperienceData;
 import com.fs.starfarer.api.Global;
-import com.fs.starfarer.api.campaign.BaseCampaignEventListener;
 import com.fs.starfarer.api.campaign.CampaignFleetAPI;
 import com.fs.starfarer.api.campaign.FleetEncounterContextPlugin;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
+import com.fs.starfarer.api.campaign.listeners.EconomyTickListener;
 import com.fs.starfarer.api.characters.PersonAPI;
 import com.fs.starfarer.api.combat.ShipAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
@@ -24,7 +24,7 @@ import java.util.Map;
 import static Jaydee8652.JaydeeProficiencies.specialists.jdp_SpecialistUtils.getPlayerGovernedColonies;
 import static Jaydee8652.JaydeeProficiencies.specialists.jdp_SpecialistUtils.getSpecialistData;
 
-public class jdp_SpecialistExperienceManager extends BaseCampaignEventListener implements ExperienceGainListenerPatch.ExperienceGainListener {
+public class jdp_SpecialistExperienceManager implements ExperienceGainListenerPatch.ExperienceGainListener, EconomyTickListener {
 	public static Map<ShipAPI.HullSize, Float> SHIP_SIZE_MULT = new HashMap<>();
 	public static Float COLONY_XP_MULT = 100f;
 	public static Float COMBAT_XP_MULT = 0.2f;
@@ -40,15 +40,16 @@ public class jdp_SpecialistExperienceManager extends BaseCampaignEventListener i
 		SHIP_SIZE_MULT.put(ShipAPI.HullSize.CAPITAL_SHIP, 1.0f);
 	}
 
-	public jdp_SpecialistExperienceManager() {
-		super(false);
-	}
-
 	public void init() {
 		if (Global.getSector().getPersistentData().get("jdp_SpecialistExperienceManager") == null) {
 			Global.getSector().getPersistentData().put("jdp_SpecialistExperienceManager", this);
 			Global.getSector().getListenerManager().addListener(this);
 		}
+	}
+
+	@Override
+	public void reportEconomyTick(int iterIndex) {
+
 	}
 
 	@Override
