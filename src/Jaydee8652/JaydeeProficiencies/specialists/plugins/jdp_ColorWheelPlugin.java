@@ -3,15 +3,17 @@ package Jaydee8652.JaydeeProficiencies.specialists.plugins;
 import Jaydee8652.JaydeeProficiencies.utils.refl.ui.ListenerFactory;
 import com.fs.starfarer.api.campaign.BaseCustomUIPanelPlugin;
 import com.fs.starfarer.api.input.InputEventAPI;
-import com.fs.starfarer.api.ui.*;
+import com.fs.starfarer.api.ui.CustomPanelAPI;
+import com.fs.starfarer.api.ui.PositionAPI;
+import com.fs.starfarer.api.ui.TextFieldAPI;
+import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
-import java.awt.Color;
+import java.awt.*;
 import java.util.List;
 
-import static Jaydee8652.JaydeeProficiencies.specialists.jdp_SpecialistUtils.clearChildren;
+import static Jaydee8652.JaydeeProficiencies.ui.jdp_UIExtensions.clearChildren;
 
 public class jdp_ColorWheelPlugin extends BaseCustomUIPanelPlugin {
     private TooltipMakerAPI textFieldTooltip;

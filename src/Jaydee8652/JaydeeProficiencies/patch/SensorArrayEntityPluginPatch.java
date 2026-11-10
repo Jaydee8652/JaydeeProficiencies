@@ -1,19 +1,14 @@
 package Jaydee8652.JaydeeProficiencies.patch;
 
-import Jaydee8652.JaydeeProficiencies.utils.campaign.jdp_Stats;
-import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CampaignFleetAPI;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
-import com.fs.starfarer.api.campaign.TextPanelAPI;
 import com.fs.starfarer.api.combat.MutableStat;
 import com.fs.starfarer.api.impl.campaign.NavBuoyEntityPlugin;
 import com.fs.starfarer.api.impl.campaign.SensorArrayEntityPlugin;
-import com.fs.starfarer.api.impl.campaign.ids.MemFlags;
 import com.fs.starfarer.api.impl.campaign.ids.Tags;
 import com.fs.starfarer.api.impl.campaign.intel.BaseIntelPlugin;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
-
 import patchlib.api.context.AfterContext;
 import patchlib.api.context.BeforeContext;
 import patchlib.api.match.ClassMatch;
@@ -21,24 +16,25 @@ import patchlib.api.match.MethodMatch;
 import patchlib.api.patch.After;
 import patchlib.api.patch.Before;
 import patchlib.api.patch.Patch;
+import patchlib.api.query.FieldQuery;
+import patchlib.api.spec.FieldQuerySpec;
 
 import static Jaydee8652.JaydeeProficiencies.utils.campaign.jdp_CampaignEntityUtils.isInverted;
 import static Jaydee8652.JaydeeProficiencies.utils.campaign.jdp_CampaignEntityUtils.validateFleet;
-import static Jaydee8652.JaydeeProficiencies.utils.refl.ReflectionUtilis.*;
 import static com.fs.starfarer.api.impl.campaign.BaseCampaignObjectivePlugin.RESET;
-import static com.fs.starfarer.api.impl.campaign.NavBuoyEntityPlugin.NAV_BONUS;
-import static com.fs.starfarer.api.impl.campaign.NavBuoyEntityPlugin.NAV_BONUS_MAKESHIFT;
 import static com.fs.starfarer.api.impl.campaign.SensorArrayEntityPlugin.SENSOR_BONUS;
 import static com.fs.starfarer.api.impl.campaign.SensorArrayEntityPlugin.SENSOR_BONUS_MAKESHIFT;
 
 @Patch(target = @ClassMatch(subtype = SensorArrayEntityPlugin.class))
 public class SensorArrayEntityPluginPatch {
+    private static final FieldQuerySpec entityQuery = FieldQuery.create().fieldName("entity").build();
+
     @Before(target = @MethodMatch(methodName = "printEffect"))
     public static void printEffect(BeforeContext context) throws NoSuchMethodException {
         var self = context.getSelf();
         if (self instanceof SensorArrayEntityPlugin plugin) {
             if(plugin.isHacked() && isInverted()) {
-                var entity = (SectorEntityToken) context.getField("entity").get();//getPrivateVariable("entity", plugin);
+                var entity = (SectorEntityToken) context.getField(entityQuery).get();
                 float bonus = SENSOR_BONUS;
                 if (entity.hasTag(Tags.MAKESHIFT)) {
                     bonus = SENSOR_BONUS_MAKESHIFT;
@@ -66,7 +62,7 @@ public class SensorArrayEntityPluginPatch {
         var self = context.getSelf();
         if (self instanceof SensorArrayEntityPlugin plugin) {
             if(plugin.isHacked() && isInverted()) {
-                var entity = (SectorEntityToken) context.getField("entity").get();//getPrivateVariable("entity", plugin);
+                var entity = (SectorEntityToken) context.getField(entityQuery).get();
                 float bonus = SENSOR_BONUS;
                 if (entity.hasTag(Tags.MAKESHIFT)) {
                     bonus = SENSOR_BONUS_MAKESHIFT;
@@ -86,11 +82,12 @@ public class SensorArrayEntityPluginPatch {
         }
     }
 
+
     @After(target = @MethodMatch(methodName = "advance"))
     public static void advance(AfterContext context) throws NoSuchMethodException {
         var self = context.getSelf();
         if (self instanceof NavBuoyEntityPlugin plugin) {
-            var entity = (SectorEntityToken) context.getField("entity").get();//getPrivateVariable("entity", plugin);
+            var entity = (SectorEntityToken) context.getField(entityQuery).get();
             if (entity.getContainingLocation() == null || entity.isInHyperspace()) return;
             if (plugin.isHacked() && isInverted()) {
                 var id = "sensor_array";

@@ -41,6 +41,7 @@ import com.fs.starfarer.api.impl.campaign.ids.Factions
 import com.fs.starfarer.api.ui.CustomPanelAPI
 import com.fs.starfarer.api.ui.TooltipMakerAPI
 import com.fs.starfarer.api.ui.TooltipMakerAPI.TooltipLocation
+import com.fs.starfarer.api.ui.UIComponentAPI
 import com.fs.starfarer.api.ui.UIPanelAPI
 import com.fs.starfarer.api.util.Misc
 import com.fs.starfarer.ui.impl.StandardTooltipV2
@@ -214,7 +215,6 @@ object jdp_SpecialistUtils {
         if(req == null) return true
         return getNumAvailable(req) >= req.size
     }
-
 
     @JvmStatic
     fun itemAvailable(specialist: jdp_Specialist, section: SpecialistSkillSection, req: CargoStackAPI?): Boolean {
@@ -477,18 +477,5 @@ object jdp_SpecialistUtils {
     @JvmStatic
     fun setOpenSpecialist(person: PersonAPI)  {
         Global.getSector().getPersistentData().put("jdp_OpenSpecialist", person)
-    }
-
-    @JvmStatic
-    fun clearChildren(panel: Any)  {
-        ReflectionUtils.invoke("clearChildren", panel)
-    }
-
-    fun UIPanelAPI.clearChildren() {
-        ReflectionUtils.invoke("clearChildren", this)
-    }
-
-    fun UIPanelAPI.getHeight() : Float  {
-        return ReflectionUtils.invoke("getHeight", this) as Float
     }
 }

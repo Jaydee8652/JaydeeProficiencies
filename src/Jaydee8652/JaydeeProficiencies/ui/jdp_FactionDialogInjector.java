@@ -14,8 +14,6 @@ import com.fs.starfarer.api.campaign.FactionAPI;
 import com.fs.starfarer.api.impl.SimulatorPluginImpl;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
-import com.fs.starfarer.ui.impl.StandardTooltipV2Expandable;
-import com.fs.starfarer.ui.interfacenew;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.lwjgl.input.Keyboard;
@@ -27,7 +25,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
-import static Jaydee8652.JaydeeProficiencies.specialists.jdp_SpecialistUtils.clearChildren;
+import static Jaydee8652.JaydeeProficiencies.ui.jdp_UIExtensions.clearChildren;
 import static Jaydee8652.JaydeeProficiencies.utils.JaydeeCommons.getColor;
 import static Jaydee8652.JaydeeProficiencies.utils.campaign.jdp_FactionUtils.*;
 import static Jaydee8652.JaydeeProficiencies.utils.refl.ui.UIReflectionUtils.*;
@@ -234,7 +232,6 @@ public class jdp_FactionDialogInjector {
         var scrollerElement = scrollerPanel.createUIElement(presetPanelWidth + 3f, Math.round(master.contentHeight - (titleHeight + (master.borderThickness * 3) + presetHeight + 6f + master.cancelButton.getInstance().getPosition().getHeight())), true);
 
         List<String> factions = new ArrayList<>();
-        //factions.add(Global.getSector().getPlayerFaction().getId());
         if(isBoxChecked(SHOW_HIDDEN_CHECKED, false)) {
             ArrayList<String> factionsTemp = new ArrayList<>(Global.getSector().getAllFactions().stream().filter(c -> !JDP_FACTION_COLOR_BLACKLIST.contains(c.getId())).map(FactionAPI::getId).toList());
             factionsTemp.sort(Comparator.comparing(Object::toString));
@@ -303,22 +300,9 @@ public class jdp_FactionDialogInjector {
             }
         });
 
-        StandardTooltipV2Expandable autogenerateTooltip = new StandardTooltipV2Expandable(400, false) {
-            public void createImpl(boolean var1x) {
-                Color base = (Color) Global.getSector().getPersistentData().get(baseUIColorKey);
-
-                addPara("Toggles the automatic generation of faction colors.", 3f);
-                addSpacer(3f);
-
-                addPara("When enabled, changing the Base color will automatically select Bright, Grid, and Dark colors algorithmically. Selecting presets will also apply all four selected colors at once.", 3f, new Color[]{Misc.getHighlightColor(), base, jdp_FactionUtils.createBrightUIColor(base), jdp_FactionUtils.createGridUIColor(base), jdp_FactionUtils.createDarkUIColor(base)}, "enabled", "Base", "Bright", "Grid", "Dark");
-
-                addSpacer(3f);
-                addPara("When disabled, the generated colors will instead be set as defaults, selecting presets will also set all four defaults to those of the preset. Defaults can be selectively applied by clicking the color wheel's respective palette in the mid right.", 3f, Misc.getHighlightColor(), "disabled");
-            }
-        };
-
-        ReflectionUtilis.invokeMethodDirectly(ClassRefs.buttonSetTooltipMethod, autogenerateCheckbox.getInstance(), 0f, autogenerateTooltip);
-        ReflectionUtilis.invokeMethodDirectly(ClassRefs.buttonSetTooltipPositionRelativeToAnchorMethod, autogenerateCheckbox.getInstance(), -2.0f, -151, autogenerateCheckbox.getInstance());
+        var autogenerateTooltip = autogenerateCheckbox.getPanel().createUIElement(400, 1000, false);
+        autogenerateCheckbox.getPanel().addUIElement(autogenerateTooltip);
+        autogenerateTooltip.addTooltipTo(new autogenerateTooltipCreator(), autogenerateCheckbox.getInstance(), TooltipMakerAPI.TooltipLocation.BELOW);
 
         var AutogeneratePos = new UIPanel(mutablePanel).add(autogenerateCheckbox);
         AutogeneratePos.getInstance().inTL(presetPanelWidth + (master.borderThickness * 3),titleHeight + master.borderThickness + (colorWheelHeight / 2) + 40);
@@ -343,20 +327,9 @@ public class jdp_FactionDialogInjector {
             }
         });
 
-        StandardTooltipV2Expandable showHiddenTooltip = new StandardTooltipV2Expandable(400, false) {
-            public void createImpl(boolean var1x) {
-                addPara("Toggles showing hidden factions.", 3f);
-                addSpacer(3f);
-
-                addPara("When enabled, allows hidden factions to be used as color presets, including spoilers and debug factions.", 3f, new Color[]{Misc.getHighlightColor()}, "spoilers and debug factions");
-
-                addSpacer(3f);
-                addPara("The individual color squares in each preset can be clicked to apply a single color from that preset.", 3f);
-            }
-        };
-
-        ReflectionUtilis.invokeMethodDirectly(ClassRefs.buttonSetTooltipMethod, showHiddenCheckbox.getInstance(), 0f, showHiddenTooltip);
-        ReflectionUtilis.invokeMethodDirectly(ClassRefs.buttonSetTooltipPositionRelativeToAnchorMethod, showHiddenCheckbox.getInstance(), -2.0f, -105, showHiddenCheckbox.getInstance());
+        var showHiddenTooltip = showHiddenCheckbox.getPanel().createUIElement(400, 1000, false);
+        showHiddenCheckbox.getPanel().addUIElement(showHiddenTooltip);
+        showHiddenTooltip.addTooltipTo(new showHiddenTooltipCreator(), showHiddenCheckbox.getInstance(), TooltipMakerAPI.TooltipLocation.BELOW);
 
         var showHiddenPos = new UIPanel(mutablePanel).add(showHiddenCheckbox);
         showHiddenPos.getInstance().inBL(master.borderThickness + 6f, master.borderThickness);
@@ -373,9 +346,49 @@ public class jdp_FactionDialogInjector {
         if (currentTab == null) return;
 
         UIPanelAPI tradePanel = (UIPanelAPI) ReflectionUtilis.getMethodAndInvokeDirectly("getTradePanel", currentTab, 0);
-        if (tradePanel != null) isShowingMarketInfo = (boolean) ReflectionUtilis.getMethodAndInvokeDirectly("isShowingMarketInfo", tradePanel, 0);
-        if (tradePanel instanceof interfacenew currentInterface) currentInterface.sizeChanged(currentInterface.getWidth(), currentInterface.getHeight());
-        if (isShowingMarketInfo) ReflectionUtilis.getMethodAndInvokeDirectly("actionPerformed", tradePanel, 2, new Object(), ReflectionUtilis.getMethodAndInvokeDirectly("getMarketInfo", tradePanel, 0));
-        if (!shown) ReflectionUtilis.getMethodAndInvokeDirectly("actionPerformed", tradePanel, 2, new Object(), ReflectionUtilis.getMethodAndInvokeDirectly("getFactionTitle", tradePanel, 0));
+        if (tradePanel != null) {
+            isShowingMarketInfo = (boolean) ReflectionUtilis.getMethodAndInvokeDirectly("isShowingMarketInfo", tradePanel, 0);
+            ReflectionUtilis.getMethodAndInvokeDirectly("sizeChanged", tradePanel, 2, jdp_UIExtensions.getWidth(tradePanel), jdp_UIExtensions.getHeight(tradePanel));
+            if (isShowingMarketInfo) ReflectionUtilis.getMethodAndInvokeDirectly("actionPerformed", tradePanel, 2, new Object(), ReflectionUtilis.getMethodAndInvokeDirectly("getMarketInfo", tradePanel, 0));
+            if (!shown) ReflectionUtilis.getMethodAndInvokeDirectly("actionPerformed", tradePanel, 2, new Object(), ReflectionUtilis.getMethodAndInvokeDirectly("getFactionTitle", tradePanel, 0));
+        }
+    }
+
+    public static class autogenerateTooltipCreator extends BaseTooltipCreator {
+        @Override
+        public float getTooltipWidth(Object tooltipParam) {
+            return 400f;
+        }
+
+        @Override
+        public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
+            Color base = (Color) Global.getSector().getPersistentData().get(baseUIColorKey);
+
+            tooltip.addPara("Toggles the automatic generation of faction colors.", 3f);
+            tooltip.addSpacer(3f);
+
+            tooltip.addPara("When enabled, changing the Base color will automatically select Bright, Grid, and Dark colors algorithmically. Selecting presets will also apply all four selected colors at once.", 3f, new Color[]{Misc.getHighlightColor(), base, jdp_FactionUtils.createBrightUIColor(base), jdp_FactionUtils.createGridUIColor(base), jdp_FactionUtils.createDarkUIColor(base)}, "enabled", "Base", "Bright", "Grid", "Dark");
+            tooltip.addSpacer(3f);
+
+            tooltip.addPara("When disabled, the generated colors will instead be set as defaults, selecting presets will also set all four defaults to those of the preset. Defaults can be selectively applied by clicking the color wheel's respective palette in the mid right.", 3f, Misc.getHighlightColor(), "disabled");
+        }
+    }
+
+    public static class showHiddenTooltipCreator extends BaseTooltipCreator {
+        @Override
+        public float getTooltipWidth(Object tooltipParam) {
+            return 400f;
+        }
+
+        @Override
+        public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
+            tooltip.addPara("Toggles showing hidden factions.", 3f);
+            tooltip.addSpacer(3f);
+
+            tooltip.addPara("When enabled, allows hidden factions to be used as color presets, including spoilers and debug factions.", 3f, new Color[]{Misc.getHighlightColor()}, "spoilers and debug factions");
+            tooltip.addSpacer(3f);
+
+            tooltip.addPara("The individual color squares in each preset can be clicked to apply a single color from that preset.", 3f);
+        }
     }
 }

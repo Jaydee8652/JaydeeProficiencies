@@ -7,7 +7,6 @@ import Jaydee8652.JaydeeProficiencies.specialists.jdp_SpecialistScreen.initialis
 import Jaydee8652.JaydeeProficiencies.specialists.jdp_SpecialistTags.DONT_SHOW_EXPO_AGAIN
 import Jaydee8652.JaydeeProficiencies.specialists.jdp_SpecialistTags.JDP_SPECIALIST_TAB_OPEN
 import Jaydee8652.JaydeeProficiencies.specialists.jdp_SpecialistUtils.getBaseSpecialistPerson
-import Jaydee8652.JaydeeProficiencies.specialists.jdp_SpecialistUtils.getHeight
 import Jaydee8652.JaydeeProficiencies.specialists.jdp_SpecialistUtils.getSpecialistData
 import Jaydee8652.JaydeeProficiencies.utils.refl.ReflectionUtilis
 import Jaydee8652.JaydeeProficiencies.utils.refl.ui.ClassRefs
@@ -20,32 +19,20 @@ import com.fs.starfarer.api.campaign.CoreUITabId
 import com.fs.starfarer.api.ui.UIPanelAPI
 import Jaydee8652.JaydeeProficiencies.utils.refl.ui.UIPanel
 import Jaydee8652.JaydeeProficiencies.utils.refl.ui.UIReflectionUtils
-import Jaydee8652.JaydeeProficiencies.utils.refl.ui.UIReflectionUtils.CONFIRM_DIALOG_HEIGHT
-import Jaydee8652.JaydeeProficiencies.utils.refl.ui.UIReflectionUtils.CONFIRM_DIALOG_WIDTH
 import Jaydee8652.JaydeeProficiencies.utils.refl.ui.UIReflectionUtils.createTextTooltip
 import Jaydee8652.JaydeeProficiencies.utils.refl.ui.UIReflectionUtils.getCoreUI
-import Jaydee8652.JaydeeProficiencies.utils.refl.ui.UIReflectionUtils.isBoxChecked
-import Jaydee8652.JaydeeProficiencies.utils.refl.ui.UIReflectionUtils.showExpositionDialog
 import com.fs.starfarer.api.characters.PersonAPI
 import com.fs.starfarer.api.ui.Alignment
 import com.fs.starfarer.api.ui.CustomPanelAPI
 import com.fs.starfarer.api.ui.CutStyle
 import com.fs.starfarer.api.util.FaderUtil
 import com.fs.starfarer.api.util.Misc
-import com.fs.starfarer.ui.impl.StandardTooltipV2Expandable
-import com.fs.starfarer.ui.interfacenew
-import org.lazywizard.console.overlay.v2.misc.getParent
-import org.lazywizard.console.overlay.v2.misc.getWidth
 import org.lwjgl.input.Keyboard
 
 class jdp_SpecialistTabInjector : EveryFrameScript {
     class jdp_SpecialistTabTrigger: ActionListener() {
         override fun trigger(vararg args: Any?) {
             Global.getSector().memoryWithoutUpdate.set(JDP_SPECIALIST_TAB_OPEN, true)
-            /*
-            if (Global.getSettings().getModManager().isModEnabled("second_in_command")) {
-                createSiCPanel()
-            } else {*/
 
             var panel = getCharacterPanel()
             var parent = panel?.getParent() ?: return
@@ -141,9 +128,6 @@ class jdp_SpecialistTabInjector : EveryFrameScript {
 
     var previousTopAncestor: Any? = null;
     override fun advance(amount: Float) {
-        var main = ReflectionUtilis.getPrivateVariable("screenPanel", Global.getSector().getCampaignUI()) ?: return
-        main = main as UIPanelAPI
-
         slider.advance(amount)
         if (decor != null) decor!!.position.inBL((slider.brightness * (decorWidth)) - decorWidth, 34f)
 

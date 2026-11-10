@@ -9,16 +9,19 @@ import patchlib.api.match.ClassMatch;
 import patchlib.api.match.MethodMatch;
 import patchlib.api.patch.After;
 import patchlib.api.patch.Patch;
+import patchlib.api.query.FieldQuery;
+import patchlib.api.spec.FieldQuerySpec;
 
 import static Jaydee8652.JaydeeProficiencies.utils.jdp_SpecStore.getHullmodIncompatibilities;
 
 @Patch(target = @ClassMatch(subtype = BaseHullMod.class))
 public class BaseHullModPatch {
+    private static final FieldQuerySpec specQuery = FieldQuery.create().fieldName("spec").build();
+
     @After(target = @MethodMatch(methodName = "isApplicableToShip"))
     public static void afterIsApplicableToShip(AfterContext context) {
         if (context.getSelf() instanceof BaseHullMod baseHullMod) {
-            context.getField("spec");
-            var spec = (HullModSpecAPI) context.getField("spec").get();
+            var spec = (HullModSpecAPI) context.getField(specQuery).get();
             ShipAPI ship = (ShipAPI) context.getArg(0);
             if (spec == null || ship == null) return;
 
@@ -31,7 +34,7 @@ public class BaseHullModPatch {
     @After(target = @MethodMatch(methodName = "getUnapplicableReason"))
     public static void afterGetUnapplicableReason(AfterContext context) {
         if (context.getSelf() instanceof BaseHullMod baseHullMod) {
-            var spec = (HullModSpecAPI) context.getField("spec").get();//ReflectionUtilis.getPrivateVariable("spec", baseHullMod);
+            var spec = (HullModSpecAPI) context.getField(specQuery).get();
             ShipAPI ship = (ShipAPI) context.getArg(0);
             if (spec == null || ship == null) return;
 

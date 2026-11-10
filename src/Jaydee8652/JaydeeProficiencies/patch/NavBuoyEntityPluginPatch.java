@@ -15,6 +15,8 @@ import patchlib.api.match.MethodMatch;
 import patchlib.api.patch.After;
 import patchlib.api.patch.Before;
 import patchlib.api.patch.Patch;
+import patchlib.api.query.FieldQuery;
+import patchlib.api.spec.FieldQuerySpec;
 
 import static Jaydee8652.JaydeeProficiencies.utils.campaign.jdp_CampaignEntityUtils.isInverted;
 import static Jaydee8652.JaydeeProficiencies.utils.campaign.jdp_CampaignEntityUtils.validateFleet;
@@ -24,12 +26,14 @@ import static com.fs.starfarer.api.impl.campaign.NavBuoyEntityPlugin.NAV_BONUS_M
 
 @Patch(target = @ClassMatch(subtype = NavBuoyEntityPlugin.class))
 public class NavBuoyEntityPluginPatch {
+    private static final FieldQuerySpec entityQuery = FieldQuery.create().fieldName("entity").build();
+
     @Before(target = @MethodMatch(methodName = "printEffect"))
     public static void printEffect(BeforeContext context) throws NoSuchMethodException {
         var self = context.getSelf();
         if (self instanceof NavBuoyEntityPlugin plugin) {
             if(plugin.isHacked() && isInverted()) {
-                var entity = (SectorEntityToken) context.getField("entity").get();//getPrivateVariable("entity", plugin);
+                var entity = (SectorEntityToken) context.getField(entityQuery).get();//getPrivateVariable("entity", plugin);
                 float bonus = NAV_BONUS;
                 if (entity.hasTag(Tags.MAKESHIFT)) {
                     bonus = NAV_BONUS_MAKESHIFT;
@@ -58,7 +62,7 @@ public class NavBuoyEntityPluginPatch {
         var self = context.getSelf();
         if (self instanceof NavBuoyEntityPlugin plugin) {
             if(plugin.isHacked() && isInverted()) {
-                var entity = (SectorEntityToken) context.getField("entity").get();//getPrivateVariable("entity", plugin);
+                var entity = (SectorEntityToken) context.getField(entityQuery).get();//getPrivateVariable("entity", plugin);
                 float bonus = NAV_BONUS;
                 if (entity.hasTag(Tags.MAKESHIFT)) {
                     bonus = NAV_BONUS_MAKESHIFT;
@@ -83,7 +87,7 @@ public class NavBuoyEntityPluginPatch {
     public static void advance(AfterContext context) throws NoSuchMethodException {
         var self = context.getSelf();
         if (self instanceof NavBuoyEntityPlugin plugin) {
-            var entity = (SectorEntityToken) context.getField("entity").get();
+            var entity = (SectorEntityToken) context.getField(entityQuery).get();
             if (entity.getContainingLocation() == null || entity.isInHyperspace()) return;
             if (plugin.isHacked() && isInverted()) {
                 var id = "nav_buoy";

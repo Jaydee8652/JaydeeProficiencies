@@ -10,21 +10,22 @@ import patchlib.api.match.ClassMatch;
 import patchlib.api.match.MethodMatch;
 import patchlib.api.patch.Patch;
 import patchlib.api.patch.RedirectMethodCall;
+import patchlib.api.query.FieldQuery;
+import patchlib.api.spec.FieldQuerySpec;
 
 import java.util.Arrays;
 import java.util.List;
 
 @Patch(target = @ClassMatch(subtype = MarketCMD.class))
 public class MarketCommandPatch {
-    @RedirectMethodCall(
-            target = @MethodMatch(methodName = "bombardSaturation"),
-            call = @MethodMatch(methodName = "getAllFactions")
-    )
+    private static final FieldQuerySpec factionQuery = FieldQuery.create().fieldName("faction").build();
+    private static final FieldQuerySpec marketQuery = FieldQuery.create().fieldName("market").build();
+
+    @RedirectMethodCall(target = @MethodMatch(methodName = "bombardSaturation"), call = @MethodMatch(methodName = "getAllFactions"))
     public static void modifyFactions(MethodCallContext context) {
         var original = context.call();
         if (isOverlooked()) {
-            context.getField("faction");
-            var faction = (FactionAPI) context.getField("faction").get();//getPrivateVariable("faction", self);
+            var faction = (FactionAPI) context.getField(factionQuery).get();
             List<FactionAPI> modified = Arrays.asList(faction);
             context.setResult(modified);
         } else {
@@ -32,12 +33,9 @@ public class MarketCommandPatch {
         }
     }
 
-    @RedirectMethodCall(
-            target = @MethodMatch(methodName = "bombardSaturation"),
-            call = @MethodMatch(methodName = "addPara", parameterTypes = { String.class })
-    )
+    @RedirectMethodCall(target = @MethodMatch(methodName = "bombardSaturation"), call = @MethodMatch(methodName = "addPara", parameterTypes = { String.class }))
     public static void modifyText(MethodCallContext context) {
-        var market = (MarketAPI) context.getField("market").get();
+        var market = (MarketAPI) context.getField(marketQuery).get();
         var string = context.getCallArg(0);
         if (isOverlooked()) {
 

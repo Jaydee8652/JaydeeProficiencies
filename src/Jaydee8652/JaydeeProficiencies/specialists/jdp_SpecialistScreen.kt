@@ -22,13 +22,10 @@ import Jaydee8652.JaydeeProficiencies.specialists.jdp_SpecialistTags.JDP_MENTORS
 import Jaydee8652.JaydeeProficiencies.specialists.jdp_SpecialistTags.JDP_NEW_SPECIALIST
 import Jaydee8652.JaydeeProficiencies.specialists.jdp_SpecialistTags.JDP_ROOT_SECTION
 import Jaydee8652.JaydeeProficiencies.specialists.jdp_SpecialistTags.JDP_UNAPPLIED_MARKER
-import Jaydee8652.JaydeeProficiencies.specialists.jdp_SpecialistUtils.clearChildren
 import Jaydee8652.JaydeeProficiencies.specialists.jdp_SpecialistUtils.consumeItem
-import Jaydee8652.JaydeeProficiencies.specialists.jdp_SpecialistUtils.createFakeSkill
 import Jaydee8652.JaydeeProficiencies.specialists.jdp_SpecialistUtils.getBaseSpecialistPerson
 import Jaydee8652.JaydeeProficiencies.specialists.jdp_SpecialistUtils.getOpenSpecialist
 import Jaydee8652.JaydeeProficiencies.specialists.jdp_SpecialistUtils.getSpecialistData
-import Jaydee8652.JaydeeProficiencies.specialists.jdp_SpecialistUtils.invokeCreateSkillTooltip
 import Jaydee8652.JaydeeProficiencies.specialists.jdp_SpecialistUtils.isAbsent
 import Jaydee8652.JaydeeProficiencies.specialists.jdp_SpecialistUtils.isBaseSpecialistPerson
 import Jaydee8652.JaydeeProficiencies.specialists.jdp_SpecialistUtils.itemAvailable
@@ -38,13 +35,14 @@ import Jaydee8652.JaydeeProficiencies.specialists.plugins.jdp_SpecialistTabsComp
 import Jaydee8652.JaydeeProficiencies.specialists.tooltips.ExperienceBarTooltipCreator
 import Jaydee8652.JaydeeProficiencies.specialists.tooltips.SpecialistSkillTooltipCreator
 import Jaydee8652.JaydeeProficiencies.specialists.tooltips.SpecialistTooltipCreator
+import Jaydee8652.JaydeeProficiencies.ui.clearChildren
+import Jaydee8652.JaydeeProficiencies.ui.getChildrenCopy
+import Jaydee8652.JaydeeProficiencies.ui.getWidth
 import Jaydee8652.JaydeeProficiencies.utils.campaign.jdp_IntelUtils.*
 import Jaydee8652.JaydeeProficiencies.utils.campaign.jdp_IntelUtils.confirmApprenticeAssignment
 import Jaydee8652.JaydeeProficiencies.utils.jdp_SpecStore
 import Jaydee8652.JaydeeProficiencies.utils.jdp_SpecStore.jdp_proficiencySpec
 import com.fs.starfarer.api.Global
-import com.fs.starfarer.api.characters.AdminData
-import com.fs.starfarer.api.ui.Alignment
 import com.fs.starfarer.api.ui.CustomPanelAPI
 import com.fs.starfarer.api.ui.TooltipMakerAPI
 import com.fs.starfarer.api.util.Misc
@@ -57,9 +55,6 @@ import com.fs.starfarer.api.ui.UIPanelAPI
 import com.fs.starfarer.campaign.CampaignState
 import com.fs.state.AppDriver
 import lunalib.lunaUI.elements.LunaElement
-import org.lazywizard.console.overlay.v2.misc.getChildrenCopy
-import org.lazywizard.console.overlay.v2.misc.getParent
-import org.lazywizard.console.overlay.v2.misc.getWidth
 
 object jdp_SpecialistScreen {
     @JvmStatic
