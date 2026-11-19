@@ -4,11 +4,11 @@
   "author": "Jaydee8652",
   "version": {
     "major": "2",
-    "minor": "0",
-    "patch": "2"
+    "minor": "1",
+    "patch": "0"
   },
   "description": "Library mod for JaydeePiracy and other related projects",
-  "gameVersion": "0.98.5a-RC5",
+  "gameVersion": "0.98.5a-RC8",
   "jars": [
     "jars/JaydeeProficiencies.jar"
   ],
@@ -27,5 +27,4 @@
       "name": "! PatchLib !"
     }
   ],
-  "originalGameVersion": "0.98a-RC8"
 }
