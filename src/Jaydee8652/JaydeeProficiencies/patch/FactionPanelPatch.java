@@ -67,11 +67,9 @@ public class FactionPanelPatch {
             }
             if (confirmButton == null || flagButton == null || existingColorButton != null) return;
 
-            var trigger = new jdp_FactionDialogInjector.jdp_FactionColorTabTrigger();
-            trigger.initialise(self);
             var button = UIReflectionUtils.makeButton(
                     "Faction Color",
-                    trigger,
+                    new jdp_FactionDialogInjector.jdp_FactionColorTabTrigger(self),
                     Misc.getBasePlayerColor(),
                     Misc.getDarkPlayerColor(),
                     Alignment.MID,

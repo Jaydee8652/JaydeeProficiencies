@@ -21,8 +21,7 @@ public class jdp_mentorship {
 				float width) {
 			Color high = Misc.getHighlightColor();
 
-			info.addPara("This specialist can support an apprentice, teaching them a selection of skills from their proficiency.",
-					3f, high, "This specialist can support an apprentice, teaching them a selection of skills from their proficiency.");
+			info.addPara("This specialist can support an apprentice, teaching them a selection of skills from their proficiency", high, 3f);
 		}
 
 		public String getEffectPerLevelDescription() {

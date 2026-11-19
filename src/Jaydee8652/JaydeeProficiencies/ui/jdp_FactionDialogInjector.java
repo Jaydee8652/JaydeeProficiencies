@@ -35,7 +35,7 @@ public class jdp_FactionDialogInjector {
     public static class jdp_FactionColorTabTrigger extends ListenerFactory.ActionListener {
         private static Object dialog;
 
-        public void initialise(Object dialog) {
+        public jdp_FactionColorTabTrigger(Object dialog) {
             jdp_FactionColorTabTrigger.dialog = dialog;
         }
 

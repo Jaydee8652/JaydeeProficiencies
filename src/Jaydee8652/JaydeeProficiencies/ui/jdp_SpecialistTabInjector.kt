@@ -4,27 +4,23 @@ import Jaydee8652.JaydeeProficiencies.specialists.data.jdp_PanelData
 import Jaydee8652.JaydeeProficiencies.specialists.elements.jdp_RenderElement
 import Jaydee8652.JaydeeProficiencies.specialists.jdp_SpecialistScreen.getCharacterPanel
 import Jaydee8652.JaydeeProficiencies.specialists.jdp_SpecialistScreen.initialise
-import Jaydee8652.JaydeeProficiencies.specialists.jdp_SpecialistTags.DONT_SHOW_EXPO_AGAIN
 import Jaydee8652.JaydeeProficiencies.specialists.jdp_SpecialistTags.JDP_SPECIALIST_TAB_OPEN
 import Jaydee8652.JaydeeProficiencies.specialists.jdp_SpecialistUtils.getBaseSpecialistPerson
 import Jaydee8652.JaydeeProficiencies.specialists.jdp_SpecialistUtils.getSpecialistData
+import Jaydee8652.JaydeeProficiencies.ui.jdp_FactionDialogInjector.showHiddenTooltipCreator
 import Jaydee8652.JaydeeProficiencies.utils.refl.ReflectionUtilis
 import Jaydee8652.JaydeeProficiencies.utils.refl.ui.ClassRefs
 import Jaydee8652.JaydeeProficiencies.utils.refl.ui.ClassRefs.buttonSetTooltipMethod
 import Jaydee8652.JaydeeProficiencies.utils.refl.ui.ClassRefs.buttonSetTooltipPositionRelativeToAnchorMethod
 import Jaydee8652.JaydeeProficiencies.utils.refl.ui.ListenerFactory.ActionListener
+import Jaydee8652.JaydeeProficiencies.utils.refl.ui.UIPanel
+import Jaydee8652.JaydeeProficiencies.utils.refl.ui.UIReflectionUtils
+import Jaydee8652.JaydeeProficiencies.utils.refl.ui.UIReflectionUtils.getCoreUI
 import com.fs.starfarer.api.EveryFrameScript
 import com.fs.starfarer.api.Global
 import com.fs.starfarer.api.campaign.CoreUITabId
-import com.fs.starfarer.api.ui.UIPanelAPI
-import Jaydee8652.JaydeeProficiencies.utils.refl.ui.UIPanel
-import Jaydee8652.JaydeeProficiencies.utils.refl.ui.UIReflectionUtils
-import Jaydee8652.JaydeeProficiencies.utils.refl.ui.UIReflectionUtils.createTextTooltip
-import Jaydee8652.JaydeeProficiencies.utils.refl.ui.UIReflectionUtils.getCoreUI
 import com.fs.starfarer.api.characters.PersonAPI
-import com.fs.starfarer.api.ui.Alignment
-import com.fs.starfarer.api.ui.CustomPanelAPI
-import com.fs.starfarer.api.ui.CutStyle
+import com.fs.starfarer.api.ui.*
 import com.fs.starfarer.api.util.FaderUtil
 import com.fs.starfarer.api.util.Misc
 import org.lwjgl.input.Keyboard
@@ -95,9 +91,9 @@ class jdp_SpecialistTabInjector : EveryFrameScript {
                 false
             );
 
-            var tooltip = createTextTooltip(390.0f, "Third party Tri-Pad extension provided by JaydeeProficiencies", 0f, Misc.getGrayColor(), Misc.getBasePlayerColor(), "JaydeeProficiencies")
-            ReflectionUtilis.invokeMethodDirectly(buttonSetTooltipMethod, button.instance, 0f, tooltip);
-            ReflectionUtilis.invokeMethodDirectly(buttonSetTooltipPositionRelativeToAnchorMethod, button.instance, -2.0f, tooltip.getHeight() + (buttonHeight / 2f), button.instance);
+            var extensionTooltip = button.getPanel().createUIElement(400f, 1000f, false);
+            button.getPanel().addUIElement(extensionTooltip);
+            extensionTooltip.addTooltipTo(extensionTooltipCreator(), button.getInstance(), TooltipMakerAPI.TooltipLocation.ABOVE);
 
             var pos = UIPanel(decor).add(button)
             pos.instance.inTL(13f, 6f)
@@ -108,6 +104,16 @@ class jdp_SpecialistTabInjector : EveryFrameScript {
 
             decor!!.position.inBL((slider.brightness * (decorWidth)) - decorWidth, 34f)
             slider.state = FaderUtil.State.IN
+        }
+    }
+
+    class extensionTooltipCreator : BaseTooltipCreator() {
+        override fun getTooltipWidth(tooltipParam: Any?): Float {
+            return 390f
+        }
+
+        override fun createTooltip(tooltip: TooltipMakerAPI, expanded: Boolean, tooltipParam: Any?) {
+            tooltip.addPara("Third party Tri-Pad extension provided by JaydeeProficiencies", 3f, Misc.getGrayColor(), Misc.getBasePlayerColor(), "JaydeeProficiencies");
         }
     }
 

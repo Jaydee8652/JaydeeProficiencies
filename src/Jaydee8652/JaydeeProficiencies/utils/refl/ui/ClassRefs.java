@@ -16,8 +16,10 @@ import com.fs.starfarer.combat.entities.Missile;
 import com.fs.starfarer.combat.entities.MovingRay;
 import com.fs.starfarer.combat.entities.PlasmaShot;
 import com.fs.starfarer.ui.impl.StandardTooltipV2;
+import org.lwjgl.util.vector.Vector2f;
 
 import java.awt.*;
+import java.util.Arrays;
 import java.util.Map;
 
 /** Stores references to class objects in the obfuscated game files */
@@ -279,14 +281,6 @@ public class ClassRefs {
             for (int j = 0; j < methods.length; j++) {
                 Object method = methods[j];
 
-                //ReflectionUtilis.getFieldType(ReflectionUtilis.getFieldByName("bar", CampaignProgressIndicator.class));
-
-                if ((ReflectionUtilis.getMethodName(method)).equals("super")) {
-                    var test = cls;
-                    var num = (test.getDeclaredMethods()).length;
-                    //10 //com.fs.starfarer.loading.specs
-                    break;
-                }
                 if ((ReflectionUtilis.getMethodName(method)).equals("getOfficerData")) {
                     var test = cls;
                     var num = (test.getDeclaredMethods()).length;
@@ -333,10 +327,12 @@ public class ClassRefs {
                 case 10:
                     if (projectileSpawnerClass == null) {
                         if (cls.getPackageName().equals("com.fs.starfarer.loading.specs")) {
-                            for (int j = 0; j < methods.length; j++) {
-                                Object method = methods[j];
+                            var returnTypes = Arrays.stream(methods).map(ReflectionUtilis::getReturnType).toList();
 
-                                if ((ReflectionUtilis.getMethodName(method)).equals("super")) {
+                            if (returnTypes.containsAll(Arrays.asList(MovingRay.class, BallisticProjectile.class, PlasmaShot.class, Missile.class, Vector2f.class))) {
+                                for (int j = 0; j < methods.length; j++) {
+                                    Object method = methods[j];
+
                                     projectileSpawnerClass = cls;
 
                                     Class<?> returnType = ReflectionUtilis.getReturnType(method);

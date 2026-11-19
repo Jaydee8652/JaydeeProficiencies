@@ -67,6 +67,8 @@ class jdp_SpecialistData {
     fun hireSpecialist(personId: String) {
         var specialist = getSpecialist(personId)
         if (specialist != null) {
+            if (specialist.hired) return
+
             var spec = specialist.spec!!
             var person = specialist.person
 

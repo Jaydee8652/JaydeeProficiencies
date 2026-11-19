@@ -5,9 +5,7 @@ import Jaydee8652.JaydeeProficiencies.specialists.data.SpecialistSkillSection
 import Jaydee8652.JaydeeProficiencies.specialists.data.jdp_PanelData
 import Jaydee8652.JaydeeProficiencies.specialists.data.jdp_Specialist
 import Jaydee8652.JaydeeProficiencies.specialists.data.jdp_SpecialistData
-import Jaydee8652.JaydeeProficiencies.specialists.elements.jdp_DisplayElement
-import Jaydee8652.JaydeeProficiencies.specialists.elements.jdp_ExperienceBarElement
-import Jaydee8652.JaydeeProficiencies.specialists.elements.jdp_HomeElement
+
 import Jaydee8652.JaydeeProficiencies.specialists.elements.jdp_LineElement
 import Jaydee8652.JaydeeProficiencies.specialists.elements.jdp_SkillGapElement
 import Jaydee8652.JaydeeProficiencies.specialists.elements.jdp_SkillSeperatorElement
@@ -16,12 +14,9 @@ import Jaydee8652.JaydeeProficiencies.specialists.elements.jdp_SpecialistBackgro
 import Jaydee8652.JaydeeProficiencies.specialists.elements.jdp_SpecialistPickerElement
 import Jaydee8652.JaydeeProficiencies.specialists.elements.jdp_TypeElement
 import Jaydee8652.JaydeeProficiencies.specialists.elements.jdp_UnderlineElement
-import Jaydee8652.JaydeeProficiencies.specialists.jdp_SpecialistTags.JDP_DEFAULT_SPECIALIST
-import Jaydee8652.JaydeeProficiencies.specialists.jdp_SpecialistTags.JDP_DUMMY_PROFICIENCY
 import Jaydee8652.JaydeeProficiencies.specialists.jdp_SpecialistTags.JDP_MENTORSHIP
 import Jaydee8652.JaydeeProficiencies.specialists.jdp_SpecialistTags.JDP_NEW_SPECIALIST
 import Jaydee8652.JaydeeProficiencies.specialists.jdp_SpecialistTags.JDP_ROOT_SECTION
-import Jaydee8652.JaydeeProficiencies.specialists.jdp_SpecialistTags.JDP_UNAPPLIED_MARKER
 import Jaydee8652.JaydeeProficiencies.specialists.jdp_SpecialistUtils.consumeItem
 import Jaydee8652.JaydeeProficiencies.specialists.jdp_SpecialistUtils.getBaseSpecialistPerson
 import Jaydee8652.JaydeeProficiencies.specialists.jdp_SpecialistUtils.getOpenSpecialist
@@ -29,21 +24,15 @@ import Jaydee8652.JaydeeProficiencies.specialists.jdp_SpecialistUtils.getSpecial
 import Jaydee8652.JaydeeProficiencies.specialists.jdp_SpecialistUtils.isAbsent
 import Jaydee8652.JaydeeProficiencies.specialists.jdp_SpecialistUtils.isBaseSpecialistPerson
 import Jaydee8652.JaydeeProficiencies.specialists.jdp_SpecialistUtils.itemAvailable
-import Jaydee8652.JaydeeProficiencies.specialists.jdp_SpecialistUtils.itemEquals
 import Jaydee8652.JaydeeProficiencies.specialists.jdp_SpecialistUtils.returnItem
 import Jaydee8652.JaydeeProficiencies.specialists.plugins.jdp_SpecialistTabsComponent
-import Jaydee8652.JaydeeProficiencies.specialists.tooltips.ExperienceBarTooltipCreator
 import Jaydee8652.JaydeeProficiencies.specialists.tooltips.SpecialistSkillTooltipCreator
 import Jaydee8652.JaydeeProficiencies.specialists.tooltips.SpecialistTooltipCreator
-import Jaydee8652.JaydeeProficiencies.ui.clearChildren
 import Jaydee8652.JaydeeProficiencies.ui.getChildrenCopy
-import Jaydee8652.JaydeeProficiencies.ui.getWidth
 import Jaydee8652.JaydeeProficiencies.utils.campaign.jdp_IntelUtils.*
-import Jaydee8652.JaydeeProficiencies.utils.campaign.jdp_IntelUtils.confirmApprenticeAssignment
 import Jaydee8652.JaydeeProficiencies.utils.jdp_SpecStore
 import Jaydee8652.JaydeeProficiencies.utils.jdp_SpecStore.jdp_proficiencySpec
 import com.fs.starfarer.api.Global
-import com.fs.starfarer.api.ui.CustomPanelAPI
 import com.fs.starfarer.api.ui.TooltipMakerAPI
 import com.fs.starfarer.api.util.Misc
 import lunalib.lunaExtensions.addLunaElement
@@ -241,11 +230,15 @@ object jdp_SpecialistScreen {
 
         if (isMentor || !mentor.hasSkill(JDP_MENTORSHIP)) specialistPickerElement.isLocked = true
         if (isAbsent(specialist)) specialistPickerElement.isAbsent = true
-
+/*
         var xpBar = jdp_ExperienceBarElement(spec, specialist, specialistElement, 265f, 24f)
         xpBar.elementPanel.position.rightOfTop(specialistPickerElement.elementPanel, 10f)
         specialistElement.addTooltipTo(ExperienceBarTooltipCreator(specialist), xpBar.elementPanel, TooltipLocation.BELOW)
         var previous: CustomPanelAPI? = xpBar.elementPanel
+*/
+        var bar = createExperienceBar(spec, specialist, specialistElement, 265f, 24f)
+        bar.mainPanel.position.rightOfTop(specialistPickerElement.elementPanel, 5f)
+        var previous = bar.mainPanel
 
         if(isMentor) {
             for (type in spec.type) {

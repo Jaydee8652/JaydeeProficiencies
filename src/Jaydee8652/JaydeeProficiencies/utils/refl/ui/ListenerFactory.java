@@ -1,20 +1,13 @@
 package Jaydee8652.JaydeeProficiencies.utils.refl.ui;
 
-import java.lang.invoke.CallSite;
-import java.lang.invoke.LambdaMetafactory;
-import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.MethodType;
-import java.util.HashMap;
-import java.util.List;
-
 import Jaydee8652.JaydeeProficiencies.specialists.plugins.jdp_ColorWheelPlugin;
 import Jaydee8652.JaydeeProficiencies.utils.refl.ReflectionUtilis;
-import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CustomUIPanelPlugin;
 import com.fs.starfarer.api.input.InputEventAPI;
-import com.fs.starfarer.api.ui.ButtonAPI;
 import com.fs.starfarer.api.ui.PositionAPI;
+
+import java.lang.invoke.*;
+import java.util.List;
 
 public class ListenerFactory {
     private static final CallSite dialogDismissedCallSite;
@@ -184,4 +177,13 @@ public class ListenerFactory {
                 throw new IllegalArgumentException("Unsupported method: " + targetMethodName);
         }
     }
+
+    public static class onClickScript {
+        public void onClick(InputEventAPI event, Object object) {
+        }
+
+        public void checkCriteria(Object object) {
+        }
+    }
+
 }

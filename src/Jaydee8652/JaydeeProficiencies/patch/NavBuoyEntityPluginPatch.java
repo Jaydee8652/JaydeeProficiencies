@@ -38,6 +38,7 @@ public class NavBuoyEntityPluginPatch {
                 if (entity.hasTag(Tags.MAKESHIFT)) {
                     bonus = NAV_BONUS_MAKESHIFT;
                 }
+
                 var text = (TooltipMakerAPI) context.getArg(0);
                 var pad = (float) context.getArg(1);
 
@@ -67,6 +68,7 @@ public class NavBuoyEntityPluginPatch {
                 if (entity.hasTag(Tags.MAKESHIFT)) {
                     bonus = NAV_BONUS_MAKESHIFT;
                 }
+
                 var text = (TooltipMakerAPI) context.getArg(0);
                 var pad = (float) context.getArg(1);
 

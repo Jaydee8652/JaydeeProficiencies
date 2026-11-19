@@ -2,52 +2,39 @@ package Jaydee8652.JaydeeProficiencies.utils.campaign;
 
 import Jaydee8652.JaydeeProficiencies.specialists.data.jdp_PanelData;
 import Jaydee8652.JaydeeProficiencies.specialists.data.jdp_Specialist;
-import Jaydee8652.JaydeeProficiencies.specialists.elements.jdp_ExperienceBarElement;
 import Jaydee8652.JaydeeProficiencies.specialists.jdp_SpecialistTags;
 import Jaydee8652.JaydeeProficiencies.specialists.tooltips.ExperienceBarTooltipCreator;
+import Jaydee8652.JaydeeProficiencies.ui.jdp_ProgressBar;
 import Jaydee8652.JaydeeProficiencies.utils.jdp_SpecStore;
-import Jaydee8652.JaydeeProficiencies.utils.refl.ui.*;
-import com.fs.starfarer.D.C;
-import com.fs.starfarer.D.M;
+import Jaydee8652.JaydeeProficiencies.utils.refl.ui.ListenerFactory;
+import Jaydee8652.JaydeeProficiencies.utils.refl.ui.UIReflectionUtils;
 import com.fs.starfarer.api.Global;
-import com.fs.starfarer.api.Script;
-import com.fs.starfarer.api.campaign.BaseCustomUIPanelPlugin;
 import com.fs.starfarer.api.campaign.CampaignUIAPI;
-import com.fs.starfarer.api.campaign.CoreUITabId;
-import com.fs.starfarer.api.campaign.CustomUIPanelPlugin;
 import com.fs.starfarer.api.campaign.comm.CommMessageAPI;
-import com.fs.starfarer.api.campaign.comm.IntelInfoPlugin;
-import com.fs.starfarer.api.campaign.econ.Industry;
-import com.fs.starfarer.api.campaign.econ.MarketAPI;
-import com.fs.starfarer.api.campaign.rules.MemoryAPI;
 import com.fs.starfarer.api.characters.PersonAPI;
-import com.fs.starfarer.api.combat.ShipAPI;
 import com.fs.starfarer.api.impl.campaign.RuleBasedInteractionDialogPluginImpl;
-import com.fs.starfarer.api.impl.campaign.abilities.TransponderAbility;
 import com.fs.starfarer.api.impl.campaign.ids.Factions;
-import com.fs.starfarer.api.impl.campaign.ids.Industries;
-import Jaydee8652.JaydeeProficiencies.specialists.jdp_SpecialistUtils.*;
 import com.fs.starfarer.api.impl.campaign.intel.BaseIntelPlugin;
 import com.fs.starfarer.api.impl.campaign.intel.MessageIntel;
-import com.fs.starfarer.api.input.InputEventAPI;
-import com.fs.starfarer.api.ui.*;
+import com.fs.starfarer.api.ui.Alignment;
+import com.fs.starfarer.api.ui.ButtonAPI;
+import com.fs.starfarer.api.ui.CustomPanelAPI;
+import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.rpg.Person;
-import lunalib.lunaUI.elements.LunaColorPicker;
 import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
-import java.util.*;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import static Jaydee8652.JaydeeProficiencies.specialists.jdp_SpecialistPickerMenu.recreatePanel;
 import static Jaydee8652.JaydeeProficiencies.specialists.jdp_SpecialistScreen.initialise;
 import static Jaydee8652.JaydeeProficiencies.specialists.jdp_SpecialistScreen.recreateSections;
-import static Jaydee8652.JaydeeProficiencies.specialists.jdp_SpecialistTags.*;
+import static Jaydee8652.JaydeeProficiencies.specialists.jdp_SpecialistTags.JDP_DEFAULT_SPECIALIST;
 import static Jaydee8652.JaydeeProficiencies.specialists.jdp_SpecialistUtils.*;
 import static Jaydee8652.JaydeeProficiencies.utils.refl.ui.UIReflectionUtils.*;
-import static com.fs.starfarer.coreui.returnnew.PANEL_HEIGHT;
-import static com.fs.starfarer.coreui.returnnew.PANEL_WIDTH;
 
 public class jdp_IntelUtils {
 	public static String extractTypeData(List<String> types) {
@@ -67,6 +54,49 @@ public class jdp_IntelUtils {
 			personelle += string + spacer;
 		}
 		return personelle;
+	}
+
+	public static jdp_ProgressBar createExperienceBar(jdp_SpecStore.jdp_proficiencySpec spec, jdp_Specialist specialist, TooltipMakerAPI tooltip, Float width, Float height) {
+		var threshold = specialist.getRequiredXP(specialist.getLevel());
+		var current = specialist.getExperience() / threshold;
+		if (specialist.getLevel() == specialist.getMaxLevel()) current = 1f;
+
+		var level = specialist.getLevel();
+		var maxLevel = specialist.getMaxLevel();
+		var skillpoints = (specialist.getLevel() - specialist.activeSkills().size());
+
+		var label = new jdp_ProgressBar.jdp_LabelData(tooltip.createLabel("empty", Misc.getTextColor()), Font.SERIF);
+
+		if (Objects.equals(specialist.getPerson().getId(), JDP_DEFAULT_SPECIALIST)) {
+			current = 0f;
+			maxLevel = spec.getApprenticeMaxLevel();
+			level = 0;
+			skillpoints = 0;
+
+			var text = skillpoints + " SP - Level " + level + " / " + maxLevel;
+
+			label.getLabel().setText(text);
+			label.getLabel().setHighlightColor(Misc.getGrayColor());
+			label.getLabel().setHighlight(skillpoints + "");
+		} else {
+			var text = skillpoints + " SP - Level " + level + " / " + maxLevel;
+			if (skillpoints == 0) {
+				label.getLabel().setText(text);
+				label.getLabel().setHighlightColor(Misc.getGrayColor());
+				label.getLabel().setHighlight(skillpoints + "");
+			} else {
+				label.getLabel().setText(text);
+				label.getLabel().setHighlightColor(Misc.getHighlightColor());
+				label.getLabel().setHighlight(skillpoints + "");
+			}
+		}
+		label.getLabel().autoSizeToWidth(label.getLabel().computeTextWidth(label.getLabel().getText()));
+
+		jdp_ProgressBar component = new jdp_ProgressBar(width, height, spec.getColorTransparent(), spec.getColor(), label, current);
+		tooltip.addCustom(component.getMainPanel(), 5f);
+		tooltip.addTooltipTo(new ExperienceBarTooltipCreator(specialist), component.getMainPanel(), TooltipMakerAPI.TooltipLocation.BELOW);
+
+		return component;
 	}
 
 	public static String extractPlayerTypeData(List<String> tags) {
@@ -235,13 +265,11 @@ public class jdp_IntelUtils {
 			mentor = getSpecialistData().getSpecialist(specialist.getMentor());
 			inactive = "Current ";
 		}
-
 		var spec = specialist.getProficiencySpec();
 		var name = spec.getName() + " Proficiency";
 
-		var xpBar = new jdp_ExperienceBarElement(spec, specialist, tooltip, 265f, 24f);
-		tooltip.addTooltipTo(new ExperienceBarTooltipCreator(specialist), xpBar.getElementPanel(), TooltipMakerAPI.TooltipLocation.BELOW);
-		xpBar.getElementPanel().getPosition().inTL((width - 265) / 2, 3f);
+		var bar = createExperienceBar(spec, specialist, tooltip, 265f, 24f);
+		bar.getMainPanel().getPosition().inTL((width - 265) / 2, 3f);
 
 		if(panelData != null) {
 			var newMentor = getSpecialistData().getSpecialist(getOpenSpecialist().getId());

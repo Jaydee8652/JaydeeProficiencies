@@ -49,7 +49,8 @@ public class UIReflectionUtils {
     public static StandardTooltipV2Expandable createTextTooltip(float width, String string, float pad, Color color, Color hl, String ... highlights) {
         StandardTooltipV2Expandable var2 = new StandardTooltipV2Expandable(width, false) {
             public void createImpl(boolean var1x) {
-                this.addPara(string, pad, color, hl, highlights);
+                ReflectionUtilis.invokeMethod("addPara", this, string, pad, color, hl, highlights);
+                //this.addPara(string, pad, color, hl, highlights);
             }
         };
         return var2;
