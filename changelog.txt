@@ -1,0 +1,45 @@
+Version 2.1.0 (2026/11/19) - NOT SAVE COMPATIBLE - 0.98.5a
+Version Version Versioning 
+
+-Fixed some UI crashes with the new update
+-Added console command to add Specialists
+
+----------------------------------------------------------
+Version 2.0.2 (2026/11/10)
+Nameless Hotfix 
+
+-Removed hard dependency on Console Commands
+-Fixed some UI crashes on Linux/Mac
+-Removed use depreciated PatchLib methods, should be more performant
+
+----------------------------------------------------------
+Version 2.0.1 (2026/10/29)
+Learn Damnit! Hotfix 
+
+-Fixed Specialists not gaining XP from markets
+-Fixed niche UI conflict when this, Nomad Flotilla and SiC are all enabled at once
+-Added a hook to the Faction screen UI creator for use by Zoey. ~If they even care~
+
+----------------------------------------------------------
+Version 2.0.0 (2026/10/23)
+Fork in the Road
+
+-Contains the Proficiency System, hence the name//(No functionality by default, see JaydeePiracy)
+-Allows for the full customisation of faction and UI color ingame through the Faction Screen.
+-Uses patchlib to expose more functionality to an API like interface
+
+Console Commands
+-AddAdmin //(Adds administrator, optional starting skill)
+-AddFleet //(Generates a fleet of the specified faction and adds all officers, ships and crew to the player fleet)
+-GenerateEvent //(Generate an event, includes Abyssal Lights, Abyssal Planets, Slipstream Ambush etc)
+-ListSpecialists //List all active Specialists
+-LevelSpecialist //Add Proficiency XP to a Specialist
+
+Generic Utils
+-colonyFlicker, isolatedMarketListener, updateMarket, getIndustryByTag, removeConditions, getPerson, refitApplicator etc
+-Orbit, fighterspec and star age validators//(Flags any oddities in the log)
+-Moved jdp_StarSystemGenerator //(shuffle and other retrogen shenanigans so they can be used by other mods)
+-New incompatible hullmod framework, HullmodIncompatibilities.csv
+-New market stat, Pather Interest Multiplier
+-WeaponFired listener
+-ExperienceGained listener
